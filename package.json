@@ -13,7 +13,7 @@
   "cloudflare": {
     "bindings": {
       "BLOGMAKER_ORIGIN": {
-        "description": "Copy **Blogmaker origin** from Blogmaker Settings → Domains and URLs → /subdirectory. This is your free bmaker.app or older bstatic.io address, including https://."
+        "description": "Copy **Blogmaker origin** from Blogmaker Settings → Domains and URLs → /subdirectory. This is your free Blogmaker address or the existing custom subdomain shown there, including https://."
       },
       "BLOG_URL": {
         "description": "Copy **Public blog URL** from the same Blogmaker panel, including https:// and the subdirectory. After deploying, add the two Worker routes shown there."

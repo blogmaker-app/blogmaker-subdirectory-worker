@@ -131,12 +131,31 @@ test('nested paths and legacy Blogmaker hosts work', async t => {
   assert.equal(fixture.requests.at(-1).url, 'https://sample.bstatic.io/post?x=1');
 });
 
+test('an existing custom subdomain can also host its public subdirectory', async t => {
+  const fixture = runtime({ BLOGMAKER_ORIGIN: 'https://news.example.com', BLOG_URL: 'https://news.example.com/archive' });
+  t.after(() => fixture.worker.dispose());
+  fixture.reply = () => new Response(null, { status: 302, headers: { Location: 'https://news.example.com/archive/next' } });
+  const response = await fixture.worker.dispatchFetch('https://news.example.com/archive/start', { redirect: 'manual' });
+  assert.equal(fixture.requests.at(-1).url, 'https://news.example.com/start');
+  assert.equal(response.headers.get('Location'), 'https://news.example.com/archive/next');
+});
+
+test('an existing custom subdomain can serve a different public hostname and path', async t => {
+  const fixture = runtime({ BLOGMAKER_ORIGIN: 'https://news.example.com', BLOG_URL: 'https://www.new-example.net/archive' });
+  t.after(() => fixture.worker.dispose());
+  fixture.reply = () => new Response('post');
+  const response = await fixture.worker.dispatchFetch('https://www.new-example.net/archive/post');
+  assert.equal(await response.text(), 'post');
+  assert.equal(fixture.requests.at(-1).url, 'https://news.example.com/post');
+});
+
 test('invalid configuration fails closed without any outbound requests', async t => {
   for (const overrides of [
     { BLOGMAKER_ORIGIN: '', BLOG_URL: '' },
     { BLOGMAKER_ORIGIN: 'https://169.254.169.254' },
-    { BLOGMAKER_ORIGIN: 'https://sample.bmaker.app.attacker.example' },
+    { BLOGMAKER_ORIGIN: 'https://localhost' },
     { BLOGMAKER_ORIGIN: 'https://user:password@sample.bmaker.app' },
+    { BLOGMAKER_ORIGIN: 'https://same.bmaker.app', BLOG_URL: 'https://same.bmaker.app/blog' },
     { BLOG_URL: 'https://example.com/' },
     { BLOG_URL: 'https://example.com/blog?query=1' },
   ]) {
