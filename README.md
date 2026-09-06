@@ -43,7 +43,7 @@ a setup message without contacting an origin.
 ## Behavior
 
 - Only the configured hostname and path are sent to the configured Blogmaker origin.
-- Blogmaker origins are restricted to a single blog subdomain of `bmaker.app` or `bstatic.io`, or to the same custom subdomain used by `BLOG_URL`.
+- Blogmaker origins are restricted to a single blog subdomain of `bmaker.app` or `bstatic.io`, or to the existing custom subdomain shown by Blogmaker.
 - Other paths on the configured hostname pass through to the existing site.
 - Query strings, methods, request bodies, and cookies are preserved.
 - HTML links, images, and forms and same-origin redirects are rewritten to the public blog path.

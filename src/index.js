@@ -2,7 +2,7 @@ function configuration(env) {
   const origin = new URL(env.BLOGMAKER_ORIGIN);
   const blog = new URL(env.BLOG_URL);
   const isBlogmakerOrigin = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.(?:bmaker\.app|bstatic\.io)$/.test(origin.hostname);
-  const usesCustomSubdomainOrigin = origin.hostname === blog.hostname && !isBlogmakerOrigin;
+  const usesCustomSubdomainOrigin = !isBlogmakerOrigin && /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(origin.hostname);
   if (origin.protocol !== 'https:' || origin.username || origin.password || origin.port ||
       origin.pathname !== '/' || origin.search || origin.hash ||
       (!isBlogmakerOrigin && !usesCustomSubdomainOrigin)) {
