@@ -1,14 +1,16 @@
 function configuration(env) {
   const origin = new URL(env.BLOGMAKER_ORIGIN);
   const blog = new URL(env.BLOG_URL);
+  const isBlogmakerOrigin = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.(?:bmaker\.app|bstatic\.io)$/.test(origin.hostname);
+  const usesCustomSubdomainOrigin = origin.hostname === blog.hostname && !isBlogmakerOrigin;
   if (origin.protocol !== 'https:' || origin.username || origin.password || origin.port ||
       origin.pathname !== '/' || origin.search || origin.hash ||
-      !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.(?:bmaker\.app|bstatic\.io)$/.test(origin.hostname)) {
+      (!isBlogmakerOrigin && !usesCustomSubdomainOrigin)) {
     throw new Error('Invalid Blogmaker origin');
   }
   const path = blog.pathname.replace(/\/+$/, '');
   if (blog.protocol !== 'https:' || blog.username || blog.password || blog.port || blog.search || blog.hash ||
-      !path || path.includes('//') || blog.hostname === origin.hostname) {
+      !path || path.includes('//') || (blog.hostname === origin.hostname && isBlogmakerOrigin)) {
     throw new Error('Invalid public blog URL');
   }
   return { origin, blog, path };
@@ -84,7 +86,8 @@ export default {
       const destination = new URL(location, upstream);
       if (destination.origin === origin.origin) {
         const redirected = new Response(response.body, response);
-        redirected.headers.set('Location', blog.origin + publicPath(destination.pathname, path) + destination.search + destination.hash);
+        const destinationPath = isBlogPath(destination.pathname, path) ? destination.pathname : publicPath(destination.pathname, path);
+        redirected.headers.set('Location', blog.origin + destinationPath + destination.search + destination.hash);
         return redirected;
       }
       return response;

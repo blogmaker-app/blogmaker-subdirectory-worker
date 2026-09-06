@@ -16,7 +16,7 @@ the existing website with its current host.
 
    | Variable | Example |
    | --- | --- |
-   | `BLOGMAKER_ORIGIN` | `https://your-blog.bmaker.app` (older blogs may use `bstatic.io`) |
+   | `BLOGMAKER_ORIGIN` | `https://your-blog.bmaker.app`, or an existing custom subdomain such as `https://news.example.com` |
    | `BLOG_URL` | `https://example.com/blog` |
 
    If the deploy screen does not ask for these values, add them under the Worker's
@@ -43,7 +43,7 @@ a setup message without contacting an origin.
 ## Behavior
 
 - Only the configured hostname and path are sent to the configured Blogmaker origin.
-- Blogmaker origins are restricted to a single blog subdomain of `bmaker.app` or `bstatic.io`.
+- Blogmaker origins are restricted to a single blog subdomain of `bmaker.app` or `bstatic.io`, or to the same custom subdomain used by `BLOG_URL`.
 - Other paths on the configured hostname pass through to the existing site.
 - Query strings, methods, request bodies, and cookies are preserved.
 - HTML links, images, and forms and same-origin redirects are rewritten to the public blog path.
