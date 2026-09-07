@@ -8,13 +8,18 @@ the existing website with its current host.
 1. In Blogmaker, open **Settings → Domains and URLs → /subdirectory** and save your full blog URL.
    Subdirectory hosting requires Blogmaker's Expert plan. The existing domain must use
    Cloudflare DNS, with its web records proxied. Keep its existing origin and email records.
-2. Expand **Set up manually** and follow Blogmaker's generated instructions. They include Worker
-   code filled in for the saved origin and public URL, plus copyable route values.
-3. Confirm the domain's SSL/TLS mode is **Full** and visit the saved blog URL. The `workers.dev`
+2. Select **Connect Cloudflare**. Blogmaker requests only the Worker and route access needed for
+   this setup and shows every planned change before applying it.
+3. Review and confirm the setup. Blogmaker uploads the Worker, configures its values, adds the
+   saved routes, and revokes its temporary Cloudflare access afterward.
+4. Confirm the domain's SSL/TLS mode is **Full** and visit the saved blog URL. The `workers.dev`
    preview address only shows a setup message; the blog is served on its configured hostname.
 
 This repository remains a public mirror of the standalone Worker source used by Blogmaker's
 managed setup flow. It contains no application code, customer data, credentials, or deploy link.
+
+If the OAuth connection is unavailable, expand **Set up without connecting Cloudflare** in
+Blogmaker and follow the generated Worker-code and route instructions there.
 
 ## Behavior
 
